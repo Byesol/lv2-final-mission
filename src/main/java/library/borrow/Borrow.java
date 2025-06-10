@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import library.collection.Collection;
+import library.member.Member;
 
 @Entity
 public class Borrow {
@@ -19,6 +20,10 @@ public class Borrow {
     @OneToOne
     @JoinColumn(name = "collection_id")
     private Collection collection;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private LocalDate dueDate;
 
@@ -32,5 +37,9 @@ public class Borrow {
 
     public LocalDate getDueDate() {
         return dueDate;
+    }
+
+    public Member getMember() {
+        return member;
     }
 }

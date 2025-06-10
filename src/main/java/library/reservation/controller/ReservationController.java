@@ -2,7 +2,6 @@ package library.reservation.controller;
 
 
 import java.util.List;
-import library.reservation.domain.Reservation;
 import library.reservation.dto.CollectionReservationResponse;
 import library.reservation.dto.MemberRequest;
 import library.reservation.service.ReservationResponse;
@@ -30,9 +29,16 @@ public class ReservationController {
         return ResponseEntity.ok(collections);
     }
 
-    @PostMapping("collection/{id}")
+    @PostMapping("/collection/{id}")
     public ResponseEntity<ReservationResponse> reserveBook(@PathVariable Long id, @RequestBody MemberRequest memberRequest) {
 
         return ResponseEntity.ok(reservationService.reserveBook(id,memberRequest));
+    }
+
+    @GetMapping("/reservation/me")
+    public ResponseEntity<List<ReservationResponse>> myReservationAndBorrows(@RequestBody MemberRequest memberRequest) {
+
+        List<ReservationResponse> collections = reservationService.myReservationAndBorrows(memberRequest);
+        return ResponseEntity.ok(collections);
     }
 }

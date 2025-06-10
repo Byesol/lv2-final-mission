@@ -5,10 +5,10 @@ import library.collection.Collection;
 import library.collection.CollectionRepository;
 import library.member.Member;
 import library.member.MemberRepository;
-import library.reservation.dto.MemberRequest;
 import library.reservation.domain.CollectionStatus;
 import library.reservation.domain.Reservation;
 import library.reservation.dto.CollectionReservationResponse;
+import library.reservation.dto.MemberRequest;
 import library.reservation.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +36,20 @@ public class ReservationService {
 
     }
 
+    public List<ReservationResponse> myReservationAndBorrows(final MemberRequest memberRequest) {
+        String email = memberRequest.email();
+        Member member = memberRepository.findByEmail(email)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("email 해당하는 member 없습니다."));
+        List<Reservation> reservations = reservationRepository.findByMemberId(member.getId());
+        return reservations.stream()
+                .map(ReservationResponse::from)
+                .toList();
+
+
+    }
+
     public ReservationResponse reserveBook(final Long collectionId, final MemberRequest memberRequest) {
         String email = memberRequest.email();
         Collection collection = collectionRepository.findById(collectionId)
@@ -43,7 +57,6 @@ public class ReservationService {
         if (!collection.getCollectionStatus().equals(CollectionStatus.BORROWED)) {
             throw new IllegalArgumentException("현재 예약 불가능합니다.");
         }
-        System.out.println("email = " + email);
         Member member = memberRepository.findByEmail(email)
                 .stream()
                 .findFirst()
@@ -51,8 +64,8 @@ public class ReservationService {
 
         Reservation reservation = new Reservation(collection, member);
         Reservation newReservation = reservationRepository.save(reservation);
+        collection.setCollectionStatus(CollectionStatus.RESERVED);
         return ReservationResponse.from(newReservation);
-
 
     }
 }

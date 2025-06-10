@@ -67,4 +67,8 @@ public class Collection {
     public Borrow getBorrow() {
         return borrow;
     }
+
+    public void setCollectionStatus(final CollectionStatus collectionStatus) {
+        this.collectionStatus = collectionStatus;
+    }
 }
