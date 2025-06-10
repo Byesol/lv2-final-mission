@@ -1,5 +1,7 @@
 package library.book;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -24,19 +26,19 @@ public class BookApiClient {
     public BookResponse searchBook(final String  search) {
 
         try {
+            String encodedQuery = URLEncoder.encode(search, StandardCharsets.UTF_8);
+
             return restClient.post()
-                    .uri(uriBuilder -> uriBuilder.path("BOOK_URL")
-                            .queryParam("query", "%EC%A3%BC%EC%8B%9D")
+                    .uri(uriBuilder -> uriBuilder
+                            .path("BOOK_URL")
+                            .queryParam("query", encodedQuery)
                             .build())
                     .contentType(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .toEntity(BookResponse.class)
                     .getBody();
-        } catch (HttpClientErrorException e) {
-
-            throw new IllegalArgumentException(e.getMessage());
-        } catch (HttpServerErrorException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Book search failed", e);
         }
     }
 
