@@ -1,4 +1,4 @@
-package library.reservation;
+package library.reservation.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
