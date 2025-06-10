@@ -17,7 +17,6 @@ public class RestClientConfig {
       ) {
 
        return builder
-                .baseUrl("https://api.tosspayments.com/v1")
                 .defaultHeader("X-Naver-Client-Id",
                         "KsCtXhM1Feo7P0K24Oka" )
                 .defaultHeader("X-Naver-Client-Secret",

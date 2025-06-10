@@ -1,5 +1,6 @@
 package library.book;
 
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import org.springframework.http.MediaType;
@@ -13,8 +14,7 @@ import org.springframework.web.client.RestClient;
 @Component
 public class BookApiClient {
 
-    private static final String SECRET_KEY_SUFFIX = ":";
-    private static final String AUTHORIZATION_HEADER = "Basic ";
+
     public static final String BOOK_URL = "https://openapi.naver.com/v1/search/book.json";
 
     private final RestClient restClient;
@@ -27,13 +27,10 @@ public class BookApiClient {
 
         try {
             String encodedQuery = URLEncoder.encode(search, StandardCharsets.UTF_8);
+            String url = BOOK_URL + "?query=" + encodedQuery;
 
-            return restClient.post()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("BOOK_URL")
-                            .queryParam("query", encodedQuery)
-                            .build())
-                    .contentType(MediaType.APPLICATION_JSON)
+            return restClient.get() //
+                    .uri(URI.create(url)) //
                     .retrieve()
                     .toEntity(BookResponse.class)
                     .getBody();

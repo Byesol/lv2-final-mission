@@ -3,9 +3,12 @@ package library.book;
 import java.util.List;
 import library.reservation.dto.CollectionReservationResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Controller
 public class BookController {
 
     private final BookApiClient bookApiClient;
@@ -16,7 +19,7 @@ public class BookController {
 
 
     @GetMapping("/search")
-    public ResponseEntity<BookResponse> getCollections(@RequestParam String search) {
+    public ResponseEntity<BookResponse> getCollections(@RequestBody String search) {
         bookApiClient.searchBook(search);
         return ResponseEntity.ok( bookApiClient.searchBook(search));
     }
