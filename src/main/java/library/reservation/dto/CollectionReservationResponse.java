@@ -1,0 +1,19 @@
+package library.reservation.dto;
+
+import java.time.LocalDate;
+import library.collection.Collection;
+import library.reservation.domain.CollectionStatus;
+
+
+public record CollectionReservationResponse(
+        Long id,
+        CollectionStatus collectionStatus,
+        String location,
+        LocalDate dueDate
+
+) {
+    public static CollectionReservationResponse from(final Collection collection) {
+        return new CollectionReservationResponse(collection.getId(), collection.getCollectionStatus(),
+                collection.getLocation(), collection.getDueDate());
+    }
+}
