@@ -3,8 +3,11 @@ package library.reservation.service;
 import java.util.List;
 import library.collection.Collection;
 import library.collection.CollectionRepository;
+import library.member.Member;
+import library.member.MemberRepository;
+import library.reservation.dto.MemberRequest;
 import library.reservation.domain.CollectionStatus;
-import library.reservation.domain.CollectionWithReservation;
+import library.reservation.domain.Reservation;
 import library.reservation.dto.CollectionReservationResponse;
 import library.reservation.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
@@ -13,9 +16,15 @@ import org.springframework.stereotype.Service;
 public class ReservationService {
 
     private final CollectionRepository collectionRepository;
+    private final ReservationRepository reservationRepository;
+    private final MemberRepository memberRepository;
 
-    public ReservationService(final CollectionRepository collectionRepository) {
+    public ReservationService(final CollectionRepository collectionRepository,
+                              final ReservationRepository reservationRepository,
+                              final MemberRepository memberRepository) {
         this.collectionRepository = collectionRepository;
+        this.reservationRepository = reservationRepository;
+        this.memberRepository = memberRepository;
     }
 
     public List<CollectionReservationResponse> getCollections(Long bookId) {
@@ -24,20 +33,26 @@ public class ReservationService {
         return collections.stream()
                 .map(CollectionReservationResponse::from)
                 .toList();
-//        List<Collection> collections = collectionRepository.findByBookId(bookId);
-//        for (Collection collection : collections) {
-//            if (collection.getCollectionStatus().equals(CollectionStatus.RESERVED)){
-//
-//            }
-//        }
-//        List<CollectionWithReservation> collectionWithReservations = collectionRepository.findCollectionWithReservationByBookId(
-//                bookId);
-//        collectionWithReservations.stream()
-//                .map(collectionWithReservation -> )
-//
+
+    }
+
+    public ReservationResponse reserveBook(final Long collectionId, final MemberRequest memberRequest) {
+        String email = memberRequest.email();
+        Collection collection = collectionRepository.findById(collectionId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 소장 자료 없습니다."));
+        if (!collection.getCollectionStatus().equals(CollectionStatus.BORROWED)) {
+            throw new IllegalArgumentException("현재 예약 불가능합니다.");
+        }
+        System.out.println("email = " + email);
+        Member member = memberRepository.findByEmail(email)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("email 해당하는 member 없습니다."));
+
+        Reservation reservation = new Reservation(collection, member);
+        Reservation newReservation = reservationRepository.save(reservation);
+        return ReservationResponse.from(newReservation);
 
 
-//                2. 각각의 컬렉션이 이제 예약들을 가진다? 근데 null 일 수도 있자나
-//                3. 책을 빌린 상태면 저걸 검색하자ㅏㅏ..
     }
 }

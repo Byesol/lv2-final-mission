@@ -6,8 +6,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDate;
+import jakarta.persistence.OneToOne;
 import library.collection.Collection;
+import library.member.Member;
 
 @Entity
 public class Reservation {
@@ -16,19 +17,29 @@ public class Reservation {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne
     @JoinColumn(name = "collection_id")
     private Collection collection;
 
-    private LocalDate dueDate;
+    public Reservation(final Collection collection, final Member member) {
+        this.member = member;
+        this.collection = collection;
+    }
+
+    public Reservation() {
+
+    }
 
     public Collection getCollection() {
         return collection;
     }
 
-    public void setCollection(Collection collection) {
-        this.collection = collection;
+    public Member getMember() {
+        return member;
     }
-
 
     public Long getId() {
         return id;

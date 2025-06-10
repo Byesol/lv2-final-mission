@@ -4,6 +4,8 @@ package library.collection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -22,9 +24,10 @@ import library.reservation.domain.Reservation;
 @Entity
 public class Collection {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String location;
-    private LocalDate dueDate;
+
     @Enumerated(EnumType.STRING)
     private CollectionStatus collectionStatus;
 
@@ -38,6 +41,9 @@ public class Collection {
     @OneToOne(mappedBy = "collection")
     private Borrow borrow;
 
+    public Collection() {
+    }
+
     public Book getBook() {
         return book;
     }
@@ -48,10 +54,6 @@ public class Collection {
 
     public String getLocation() {
         return location;
-    }
-
-    public LocalDate getDueDate() {
-        return dueDate;
     }
 
     public CollectionStatus getCollectionStatus() {

@@ -29,4 +29,8 @@ public class Borrow {
     public Long getId() {
         return id;
     }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
 }
