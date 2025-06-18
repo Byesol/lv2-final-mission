@@ -38,6 +38,12 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.reserveBook(id,memberRequest));
     }
 
+    @GetMapping("/reservations")
+    public ResponseEntity<List<ReservationResponse>> getAllReservations() {
+        List<ReservationResponse> reservations = reservationService.getAllReservations();
+        return ResponseEntity.ok(reservations);
+    }
+
     @GetMapping("/reservation/me")
     public ResponseEntity<List<ReservationResponse>> myReservationAndBorrows(@RequestBody MemberRequest memberRequest) {
         List<ReservationResponse> result = reservationService.myReservationAndBorrows(memberRequest);

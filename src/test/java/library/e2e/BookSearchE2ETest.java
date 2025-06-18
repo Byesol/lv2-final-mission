@@ -14,10 +14,6 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@TestPropertySource(properties = {
-    "naver.client-id=KsCtXhM1Feo7P0K24Oka",
-    "naver.client-secret=e7m7DCN1vn"
-})
 class BookSearchE2ETest {
 
     @LocalServerPort

@@ -1,6 +1,7 @@
 package library.reservation.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import library.collection.domain.Collection;
 import library.collection.repository.CollectionRepository;
 import library.member.domain.Member;
@@ -87,5 +88,12 @@ public class ReservationService {
         }
         
         reservationRepository.delete(reservation);
+    }
+
+    public List<ReservationResponse> getAllReservations() {
+        List<Reservation> reservations = reservationRepository.findAll();
+        return reservations.stream()
+                .map(ReservationResponse::from)
+                .toList();
     }
 }

@@ -40,7 +40,6 @@ public class LibraryE2ETest {
     }
 
 
-
     @Test
     void 도서_컬렉션_조회_테스트() {
         // given
@@ -51,7 +50,7 @@ public class LibraryE2ETest {
                 .when().get("/book/{id}", bookId)
                 .then().log().all()
                 .statusCode(200)
-                .body("$", hasSize(greaterThanOrEqualTo(0)));
+                .body("size()", equalTo(2));
     }
 
     @Test
@@ -71,7 +70,7 @@ public class LibraryE2ETest {
                 .statusCode(200)
                 .body("id", notNullValue())
                 .body("email", equalTo(USER_EMAIL))
-                .body("collectionId", equalTo(collectionId.intValue()));
+                .body("collectionId", equalTo(1));
 
         // then - 예약 목록 확인
         RestAssured.given().log().all()
@@ -80,7 +79,7 @@ public class LibraryE2ETest {
                 .when().get("/reservation/me")
                 .then().log().all()
                 .statusCode(200)
-                .body("size()", is(1));
+                .body("size()", equalTo(1));
 
         // when - 예약 삭제
         RestAssured.given().log().all()
@@ -97,7 +96,7 @@ public class LibraryE2ETest {
                 .when().get("/reservation/me")
                 .then().log().all()
                 .statusCode(200)
-                .body("size()", is(0));
+                .body("size()", equalTo(0));
     }
 
     @Test
@@ -105,7 +104,7 @@ public class LibraryE2ETest {
         // given
         LibraryTestFixture.createTestMember(USER_EMAIL);
         LibraryTestFixture.createTestReservation(USER_EMAIL, 1L);
-        
+
         Map<String, String> request = new HashMap<>();
         request.put("email", USER_EMAIL);
 
@@ -116,7 +115,7 @@ public class LibraryE2ETest {
                 .when().get("/reservation/me")
                 .then().log().all()
                 .statusCode(200)
-                .body("$", hasSize(greaterThanOrEqualTo(1)));
+                .body("size()", equalTo(1));
     }
 
     @Test
@@ -125,10 +124,9 @@ public class LibraryE2ETest {
         LibraryTestFixture.createTestMember(USER_EMAIL);
         LibraryTestFixture.createTestMember(OTHER_USER_EMAIL);
         LibraryTestFixture.createTestReservation(USER_EMAIL, 1L);
-        
+
         Map<String, String> wrongUserRequest = new HashMap<>();
         wrongUserRequest.put("email", OTHER_USER_EMAIL);
-
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
@@ -153,5 +151,27 @@ public class LibraryE2ETest {
                 .statusCode(201)
                 .body("id", notNullValue())
                 .body("email", equalTo("test@example.com"));
+    }
+
+    @Test
+    @DisplayName("전체 예약 현황 조회 API 테스트")
+    void 전체_예약_현황_조회_테스트() {
+
+        Map<String, String> memberRequest = new HashMap<>();
+        memberRequest.put("email", USER_EMAIL);
+
+        LibraryTestFixture.createTestMember(USER_EMAIL);
+        LibraryTestFixture.createTestReservation(USER_EMAIL, 1L);
+        LibraryTestFixture.createTestReservation(USER_EMAIL, 3L);
+
+        RestAssured.given().log().all()
+                .when().get("/reservations")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", equalTo(2))
+                .body("[0].id", notNullValue())
+                .body("[0].collectionId", notNullValue())
+                .body("[0].email", equalTo(USER_EMAIL))
+                .body("[1].email", equalTo(USER_EMAIL));
     }
 }
