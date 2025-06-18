@@ -36,7 +36,7 @@ public class ReservationService {
 
     }
 
-    public List<ReservationResponse> myReservationAndBorrows(final MemberRequest memberRequest) {
+    public List<ReservationResponse> myReservationAndBorrows(MemberRequest memberRequest) {
         String email = memberRequest.email();
         Member member = memberRepository.findByEmail(email)
                 .stream()
@@ -69,23 +69,22 @@ public class ReservationService {
 
     }
 
-    public void deleteReservation(final Long reservationId, final MemberRequest memberRequest) {
-        String email = memberRequest.email();
+    public void deleteReservation(Long reservationId, String email) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다."));
+
         Member member = memberRepository.findByEmail(email)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("email 해당하는 member 없습니다."));
-        
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 예약이 없습니다."));
-        
+
+        System.out.println("reservation.getMember().getId() = " + reservation.getMember().getId());
+        System.out.println("reservation.getMember().getEmail() = " + reservation.getMember().getEmail());
+        System.out.println("member.getEmail() = " + member.getEmail());
+        System.out.println("member.getId() = " + member.getId());
         if (!reservation.getMember().getId().equals(member.getId())) {
-            throw new IllegalArgumentException("본인의 예약만 삭제할 수 있습니다.");
+            throw new IllegalArgumentException("본인의 예약만 삭제할 수 있습니다");
         }
-        
-        Collection collection = reservation.getCollection();
-        collection.setCollectionStatus(CollectionStatus.BORROWED);
-        collectionRepository.save(collection);
         
         reservationRepository.delete(reservation);
     }

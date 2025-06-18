@@ -2,6 +2,7 @@ package library.reservation.controller;
 
 
 import java.util.List;
+import java.util.Map;
 import library.reservation.dto.CollectionReservationResponse;
 import library.reservation.dto.MemberRequest;
 import library.reservation.service.ReservationResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ReservationController {
@@ -38,14 +40,17 @@ public class ReservationController {
 
     @GetMapping("/reservation/me")
     public ResponseEntity<List<ReservationResponse>> myReservationAndBorrows(@RequestBody MemberRequest memberRequest) {
-
-        List<ReservationResponse> collections = reservationService.myReservationAndBorrows(memberRequest);
-        return ResponseEntity.ok(collections);
+        List<ReservationResponse> result = reservationService.myReservationAndBorrows(memberRequest);
+        return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/reservation/{reservationId}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable Long reservationId, @RequestBody MemberRequest memberRequest) {
-        reservationService.deleteReservation(reservationId, memberRequest);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/reservation/{id}")
+    public ResponseEntity<Map<String, String>> deleteReservation(
+            @PathVariable Long id,
+            @RequestBody MemberRequest request) {
+
+            reservationService.deleteReservation(id, request.email());
+            return ResponseEntity.ok().build();
+
     }
 }
