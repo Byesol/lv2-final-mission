@@ -68,4 +68,25 @@ public class ReservationService {
         return ReservationResponse.from(newReservation);
 
     }
+
+    public void deleteReservation(final Long reservationId, final MemberRequest memberRequest) {
+        String email = memberRequest.email();
+        Member member = memberRepository.findByEmail(email)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("email 해당하는 member 없습니다."));
+        
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 예약이 없습니다."));
+        
+        if (!reservation.getMember().getId().equals(member.getId())) {
+            throw new IllegalArgumentException("본인의 예약만 삭제할 수 있습니다.");
+        }
+        
+        Collection collection = reservation.getCollection();
+        collection.setCollectionStatus(CollectionStatus.BORROWED);
+        collectionRepository.save(collection);
+        
+        reservationRepository.delete(reservation);
+    }
 }

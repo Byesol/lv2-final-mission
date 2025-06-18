@@ -8,6 +8,7 @@ import library.reservation.service.ReservationResponse;
 import library.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,5 +41,11 @@ public class ReservationController {
 
         List<ReservationResponse> collections = reservationService.myReservationAndBorrows(memberRequest);
         return ResponseEntity.ok(collections);
+    }
+
+    @DeleteMapping("/reservation/{reservationId}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long reservationId, @RequestBody MemberRequest memberRequest) {
+        reservationService.deleteReservation(reservationId, memberRequest);
+        return ResponseEntity.noContent().build();
     }
 }

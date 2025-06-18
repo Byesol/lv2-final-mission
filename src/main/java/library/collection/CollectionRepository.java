@@ -8,5 +8,7 @@ public interface CollectionRepository {
     List<Collection> findByBookId(Long bookId);
 
     Optional<Collection> findById(Long id);
+    
+    Collection save(Collection collection);
 
 }
