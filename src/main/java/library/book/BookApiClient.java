@@ -3,40 +3,52 @@ package library.book;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
-
-
+import org.springframework.web.client.RestClientResponseException;
 
 @Component
 public class BookApiClient {
 
-
-    public static final String BOOK_URL = "https://openapi.naver.com/v1/search/book.json";
+    private static final String BOOK_URL = "https://openapi.naver.com/v1/search/book.json";
 
     private final RestClient restClient;
+    private final HttpHeaders defaultHeaders;
 
-    public BookApiClient(RestClient restClient) {
-        this.restClient = restClient;
+    public BookApiClient(RestClient.Builder restClientBuilder,
+                         @Value("${naver.client-id}") String clientId,
+                         @Value("${naver.client-secret}") String clientSecret) {
+        this.restClient = restClientBuilder.baseUrl(BOOK_URL).build();
+
+        this.defaultHeaders = new HttpHeaders();
+        defaultHeaders.setContentType(MediaType.APPLICATION_JSON);
+        defaultHeaders.set("X-Naver-Client-Id", clientId);
+        defaultHeaders.set("X-Naver-Client-Secret", clientSecret);
     }
 
-    public BookResponse searchBook(final String  search) {
-
+    public BookResponse searchBook(String query) {
         try {
-            String encodedQuery = URLEncoder.encode(search, StandardCharsets.UTF_8);
-            String url = BOOK_URL + "?query=" + encodedQuery;
+            String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+            URI uri = URI.create(BOOK_URL + "?query=" + encodedQuery);
 
-            return restClient.get() //
-                    .uri(URI.create(url)) //
+            return restClient.get()
+                    .uri(uri)
+                    .headers(headers -> headers.addAll(defaultHeaders))
                     .retrieve()
-                    .toEntity(BookResponse.class)
-                    .getBody();
+                    .body(BookResponse.class);
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            throw new RuntimeException("API 요청 오류: " + e.getStatusCode() + " - " + e.getResponseBodyAsString(), e);
+        } catch (RestClientResponseException e) {
+            throw new RuntimeException("API 응답 처리 중 오류 발생: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Book search failed", e);
+            throw new RuntimeException("책 검색 요청 실패", e);
         }
     }
-
 }

@@ -1,4 +1,11 @@
 package library.book;
 
-public record BookResponse(String items) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
+
+public record BookResponse(
+
+    @JsonProperty("items") List<BookItem> items
+) {
+
 }
