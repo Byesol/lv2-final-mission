@@ -13,6 +13,10 @@ public class Member {
     private Long id;
     private String email;
 
+    public Member(final String email) {
+        this.email = email;
+    }
+
     protected Member() {
     }
 
@@ -23,4 +27,5 @@ public class Member {
     public String getEmail() {
         return email;
     }
+
 }
