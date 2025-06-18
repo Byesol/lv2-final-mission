@@ -1,7 +1,8 @@
-package library.collection;
+package library.collection.repository;
 
 import java.util.List;
 import java.util.Optional;
+import library.collection.domain.Collection;
 
 public interface CollectionRepository {
 

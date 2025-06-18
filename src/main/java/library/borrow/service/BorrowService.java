@@ -1,13 +1,14 @@
-package library.borrow;
+package library.borrow.service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
-import library.collection.Collection;
-import library.collection.CollectionRepository;
-import library.member.Member;
-import library.member.MemberRepository;
-import library.reservation.domain.CollectionStatus;
+import library.borrow.dto.BorrowResponse;
+import library.borrow.domain.Borrow;
+import library.borrow.repository.BorrowRepository;
+import library.collection.domain.Collection;
+import library.collection.repository.CollectionRepository;
+import library.member.domain.Member;
+import library.member.repository.MemberRepository;
+import library.collection.domain.CollectionStatus;
 import library.reservation.dto.MemberRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

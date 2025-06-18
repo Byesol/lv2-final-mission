@@ -1,5 +1,7 @@
-package library.book;
+package library.book.controller;
 
+import library.book.dto.BookResponse;
+import library.book.infrastructure.BookApiClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -1,6 +1,7 @@
-package library.borrow;
+package library.borrow.dto;
 
 import java.time.LocalDate;
+import library.borrow.domain.Borrow;
 
 public record BorrowResponse(
     Long id,

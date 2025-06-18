@@ -1,4 +1,4 @@
-package library.collection;
+package library.collection.domain;
 
 
 import jakarta.persistence.Entity;
@@ -11,12 +11,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import library.book.Book;
-import library.borrow.Borrow;
-import library.reservation.domain.CollectionStatus;
+import library.book.domain.Book;
+import library.borrow.domain.Borrow;
 import library.reservation.domain.Reservation;
 
 

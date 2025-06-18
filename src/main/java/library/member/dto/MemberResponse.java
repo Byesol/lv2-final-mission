@@ -1,4 +1,6 @@
-package library.member;
+package library.member.dto;
+
+import library.member.domain.Member;
 
 public record MemberResponse(Long id, String email) {
     

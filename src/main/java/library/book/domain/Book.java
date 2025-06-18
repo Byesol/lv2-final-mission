@@ -1,4 +1,4 @@
-package library.book;
+package library.book.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

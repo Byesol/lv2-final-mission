@@ -1,5 +1,7 @@
-package library.member;
+package library.member.service;
 
+import library.member.domain.Member;
+import library.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service

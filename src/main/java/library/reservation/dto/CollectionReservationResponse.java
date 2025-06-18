@@ -1,8 +1,8 @@
 package library.reservation.dto;
 
 import java.time.LocalDate;
-import library.collection.Collection;
-import library.reservation.domain.CollectionStatus;
+import library.collection.domain.Collection;
+import library.collection.domain.CollectionStatus;
 
 
 public record CollectionReservationResponse(

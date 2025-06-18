@@ -1,4 +1,4 @@
-package library.member;
+package library.member.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

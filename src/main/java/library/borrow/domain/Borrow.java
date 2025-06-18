@@ -1,4 +1,4 @@
-package library.borrow;
+package library.borrow.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,8 +8,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
-import library.collection.Collection;
-import library.member.Member;
+import library.collection.domain.Collection;
+import library.member.domain.Member;
 
 @Entity
 public class Borrow {
@@ -27,6 +27,12 @@ public class Borrow {
 
     private LocalDate dueDate;
 
+    public Borrow(final Collection collection, final Member member, final LocalDate dueDate) {
+        this.collection = collection;
+        this.member = member;
+        this.dueDate = dueDate;
+    }
+
     public Collection getCollection() {
         return collection;
     }
@@ -41,5 +47,17 @@ public class Borrow {
 
     public Member getMember() {
         return member;
+    }
+
+    public void setCollection(Collection collection) {
+        this.collection = collection;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 }

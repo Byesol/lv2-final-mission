@@ -1,11 +1,11 @@
 package library.reservation.service;
 
 import java.util.List;
-import library.collection.Collection;
-import library.collection.CollectionRepository;
-import library.member.Member;
-import library.member.MemberRepository;
-import library.reservation.domain.CollectionStatus;
+import library.collection.domain.Collection;
+import library.collection.repository.CollectionRepository;
+import library.member.domain.Member;
+import library.member.repository.MemberRepository;
+import library.collection.domain.CollectionStatus;
 import library.reservation.domain.Reservation;
 import library.reservation.dto.CollectionReservationResponse;
 import library.reservation.dto.MemberRequest;

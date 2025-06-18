@@ -6,9 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import library.collection.Collection;
-import library.member.Member;
+import library.collection.domain.Collection;
+import library.member.domain.Member;
 
 @Entity
 public class Reservation {

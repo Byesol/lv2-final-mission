@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -136,5 +137,21 @@ public class LibraryE2ETest {
                 .then().log().all()
                 .statusCode(400)
                 .body("message", containsString("본인의 예약만 삭제할 수 있습니다"));
+    }
+
+    @Test
+    @DisplayName("회원 생성 API 테스트")
+    void 회원_생성_테스트() {
+        Map<String, String> memberRequest = new HashMap<>();
+        memberRequest.put("email", "test@example.com");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(memberRequest)
+                .when().post("/members")
+                .then().log().all()
+                .statusCode(201)
+                .body("id", notNullValue())
+                .body("email", equalTo("test@example.com"));
     }
 }
