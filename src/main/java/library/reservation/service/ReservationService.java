@@ -79,10 +79,6 @@ public class ReservationService {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("email 해당하는 member 없습니다."));
 
-        System.out.println("reservation.getMember().getId() = " + reservation.getMember().getId());
-        System.out.println("reservation.getMember().getEmail() = " + reservation.getMember().getEmail());
-        System.out.println("member.getEmail() = " + member.getEmail());
-        System.out.println("member.getId() = " + member.getId());
         if (!reservation.getMember().getId().equals(member.getId())) {
             throw new IllegalArgumentException("본인의 예약만 삭제할 수 있습니다");
         }
